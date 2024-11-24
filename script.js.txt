@@ -1,0 +1,89 @@
+let display = document.getElementById("display");
+let buttons = document.querySelectorAll("button");
+
+let calculator = {
+displayValue: "",
+firstOperand: null,
+secondOperand: null,
+operation: null,
+};
+
+function updateDisplay() {
+display.value = calculator.displayValue;
+}
+
+function handleNumberInput(number) {
+if (calculator.operation === null) {
+calculator.displayValue += number;
+calculator.firstOperand = parseFloat(calculator.displayValue);
+} else {
+calculator.displayValue += number;
+calculator.secondOperand = parseFloat(calculator.displayValue);
+}
+updateDisplay();
+}
+
+function handleOperationInput(operation) {
+calculator.operation = operation;
+calculator.displayValue = "";
+}
+
+function handleEqualsInput() {
+if (calculator.firstOperand !== null && calculator.secondOperand !== null) {
+let result;
+switch (calculator.operation) {
+case "add":
+result = calculator.firstOperand + calculator.secondOperand;
+break;
+case "subtract":
+result = calculator.firstOperand - calculator.secondOperand;
+break;
+case "multiply":
+result = calculator.firstOperand * calculator.secondOperand;
+break;
+case "divide":
+result = calculator.firstOperand / calculator.secondOperand;
+break;
+default:
+result = null;
+}
+calculator.displayValue = result.toString();
+calculator.firstOperand = null;
+calculator.secondOperand = null;
+calculator.operation = null;
+}
+updateDisplay();
+}
+
+// Add event listeners to buttons
+buttons.forEach(button => {
+button.addEventListener("click", () => {
+let value = button.textContent;
+switch (value) {
+case "C":
+calculator.displayValue = "";
+calculator.firstOperand = null;
+calculator.secondOperand = null;
+calculator.operation = null;
+updateDisplay();
+break;
+case "=":
+handleEqualsInput();
+break;
+case "+":
+handleOperationInput("add");
+break;
+case "-":
+handleOperationInput("subtract");
+break;
+case "*":
+handleOperationInput("multiply");
+break;
+case "/":
+handleOperationInput("divide");
+break;
+default:
+handleNumberInput(value);
+}
+});
+});
